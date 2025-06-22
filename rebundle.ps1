@@ -1,0 +1,1 @@
+pyinstaller --onefile --windowed --icon=tray_icon.ico --add-data "tray_icon.png;." --add-data "tray_icon.ico;." JiggleBot-Windows.py
