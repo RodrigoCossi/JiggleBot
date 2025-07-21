@@ -1,4 +1,4 @@
-# This was my original project, which inspired the creation of the JiggleBot App.
+# This was my original project, which inspired the creation of the JiggleBot tray App.
 
 #Disclaimer of Liability for Misuse:
 #This software is provided for educational and authorized use only. The creator of this software (@RodrigoCossi) is not responsible for any misuse, unauthorized access, or illegal activity carried out using this tool.
@@ -10,7 +10,7 @@
 # - Checks for real idle time every 60 sec. Only triggers if idle time is > 4 minutes.
 # - Uses SendInput() from user32.dll to simulate actual mouse movement at the system level.
 # - Works even if PowerShell runs in the background.
-# - Should fully prevent screen lock, even in corporate/managed setups.
+# - Should fully prevent screen lock, even in corporate/managed setups (read the Disclaimer of Liability for Misuse above).
 # - Lightweight, efficient and discrete.
 
 
