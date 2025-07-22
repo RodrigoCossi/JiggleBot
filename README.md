@@ -3,6 +3,7 @@
 
 JiggleBot is a lightweight Windows utility that prevents your computer from locking or going to sleep due to inactivity. It works by simulating periodic mouse movements, keeping your session active without manual intervention.
 
+
 ## Disclaimer of Liability for Misuse
 
 This software is provided for educational and authorized use only. The creator of this software (@RodrigoCossi) is not responsible for any misuse, unauthorized access, or illegal activity carried out using this tool.
@@ -20,6 +21,7 @@ By using this software, you agree to use it in compliance with all applicable la
 - "About" dialog for app information.
 - Clean exit from tray menu.
 
+
 ## How It Works
 
 JiggleBot monitors your system's idle time. If no user input is detected for 4 minutes, it simulates a small mouse movement to reset the idle timer. This keeps your computer awake and prevents automatic locking.
@@ -32,6 +34,8 @@ JiggleBot monitors your system's idle time. If no user input is detected for 4 m
     - **About**: View app info.
     - **Pause/Resume**: Temporarily stop or restart the jiggling.
     - **Quit**: Exit the app.
+  
+  <img width="284" height="139" alt="image" src="https://github.com/user-attachments/assets/4fecfaa8-a89a-4a76-8310-eaf1a2358ffb" />
 
 ## Installation
 
