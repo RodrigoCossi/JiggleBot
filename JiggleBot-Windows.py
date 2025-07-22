@@ -13,10 +13,12 @@ from PIL import Image
 paused = False
 stop_event = threading.Event()
 tray_icon = None  # Global reference to the tray icon
+mutex = None  # Global reference to instance
 
 
 # Prevent multiple instances using a named mutex
 def is_already_running():
+    global mutex
     mutex = ctypes.windll.kernel32.CreateMutexW(None, False, "JiggleBotMutex")
     last_error = ctypes.windll.kernel32.GetLastError()
     return last_error == 183  # ERROR_ALREADY_EXISTS
@@ -61,19 +63,12 @@ def resource_path(relative_path):
 def create_image():
     return Image.open(resource_path("new_tray_icon.png"))
 
-
-# Path where startup executable will be saved.
-def get_startup_exe_path():
-    startup_dir = os.path.join(os.getenv('APPDATA'), 'Microsoft\\Windows\\Start Menu\\Programs\\Startup')
-    return os.path.join(startup_dir, "JiggleBot.exe")
-
 # Tray icon actions
 def build_menu():
     return Menu(
         MenuItem("About", show_about),
         MenuItem("Resume" if paused else "Pause", toggle_pause),
-        MenuItem("Quit", on_quit),
-        MenuItem("Uninstall", uninstall)
+        MenuItem("Quit", on_quit)
     )
 
 def toggle_pause(icon, item):
@@ -87,25 +82,16 @@ def show_about(icon, item):
 
 def on_quit(icon, item):
     stop_event.set()
+    global mutex
+    if mutex:
+        ctypes.windll.kernel32.CloseHandle(mutex)
     icon.stop()
-
-def uninstall(icon, item):
-    try:
-        exe_path = get_startup_exe_path()
-        if os.path.exists(exe_path):
-            os.remove(exe_path)
-
-        show_info("Uninstall", "Jiggle Bot has been fully uninstalled from Programs/Startup folder.")
-        icon.stop()
-    except Exception as e:
-        show_error("Uninstall failed", e)
 
 def show_info(title, message):
     ctypes.windll.user32.MessageBoxW(0, message, title, 0x40)  # MB_ICONINFORMATION
 
 def show_error(title, error):
     ctypes.windll.user32.MessageBoxW(0, str(error), title, 0x10)  # MB_ICONERROR
-
 
 # Main entry point
 def main():
@@ -119,10 +105,8 @@ def main():
 
     threading.Thread(target=monitor_idle, daemon=True).start()
 
-    show_info("Jiggle Bot", "Jiggle Bot is running in the system tray.")
-
     tray_icon = Icon("jigglebot", icon=create_image(), title="Jiggle Bot: Programmatic Mouse Jiggler")
-    tray_icon.menu = build_menu()
+    tray_icon.menu = build_menu()    
     tray_icon.run()
 
 if __name__ == "__main__":
