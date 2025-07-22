@@ -4,7 +4,6 @@ import threading
 import ctypes
 import os
 import sys
-import shutil
 from pystray import Icon, MenuItem, Menu
 from PIL import Image
 
@@ -60,7 +59,7 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 def create_image():
-    return Image.open(resource_path("tray_icon.png"))
+    return Image.open(resource_path("new_tray_icon.png"))
 
 
 # Path where startup executable will be saved.
@@ -68,16 +67,11 @@ def get_startup_exe_path():
     startup_dir = os.path.join(os.getenv('APPDATA'), 'Microsoft\\Windows\\Start Menu\\Programs\\Startup')
     return os.path.join(startup_dir, "JiggleBot.exe")
 
-def is_in_startup():
-    return os.path.exists(get_startup_exe_path())
-
-
 # Tray icon actions
 def build_menu():
     return Menu(
         MenuItem("About", show_about),
         MenuItem("Resume" if paused else "Pause", toggle_pause),
-        MenuItem("Disable Start with Windows" if is_in_startup() else "Enable Start with Windows", toggle_startup),
         MenuItem("Quit", on_quit),
         MenuItem("Uninstall", uninstall)
     )
@@ -87,22 +81,9 @@ def toggle_pause(icon, item):
     paused = not paused
     tray_icon.menu = build_menu()
 
-def toggle_startup(icon, item):
-    target_exe = get_startup_exe_path()
-    if is_in_startup():
-        try:
-            os.remove(target_exe)
-        except Exception as e:
-            show_error("Failed to remove from startup", e)
-    else:
-        try:
-            shutil.copy2(sys.executable, target_exe)
-        except Exception as e:
-            show_error("Failed to copy to startup folder", e)
-    tray_icon.menu = build_menu()
-
 def show_about(icon, item):
-    show_info("About", "Jiggle Bot: Programmatic Mouse Jiggler\nVersion 1.0\nPrevents screen lock due to inactivity.\nBy RodrigoCossi @ GitHub.com")
+    threading.Thread(target=lambda: show_info(
+        "About", "Jiggle Bot: Programmatic Mouse Jiggler\nVersion 1.0\nBy RodrigoCossi @ GitHub")).start()
 
 def on_quit(icon, item):
     stop_event.set()
@@ -133,10 +114,12 @@ def main():
     if is_already_running():
         show_info("Jiggle Bot", "Jiggle Bot is already running in the system tray.")
         return
+    
+    # Startup logic moved to installer or task scheduler
 
     threading.Thread(target=monitor_idle, daemon=True).start()
 
-    show_info("Jiggle Bot", "Jiggle Bot has been installed in your Programs/Startup folder.\nYou can access it from the system tray.")
+    show_info("Jiggle Bot", "Jiggle Bot is running in the system tray.")
 
     tray_icon = Icon("jigglebot", icon=create_image(), title="Jiggle Bot: Programmatic Mouse Jiggler")
     tray_icon.menu = build_menu()
