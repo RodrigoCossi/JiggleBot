@@ -5,7 +5,7 @@ a = Analysis(
     ['JiggleBot-Windows.py'],
     pathex=[],
     binaries=[],
-    datas=[('tray_icon.png', '.'), ('tray_icon.ico', '.')],
+    datas=[('new_tray_icon.png', '.'), ('new_tray_icon.ico', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -35,5 +35,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['tray_icon.ico'],
+    icon=['new_tray_icon.ico'],
 )
