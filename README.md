@@ -39,7 +39,7 @@ JiggleBot monitors your system's idle time. If no user input is detected for 4 m
 
 ## Installation
 
-- Requires Python 3 and Pip pre-installed. If you already have Python3 and Pip, run `Install_dependencies_for_bundling.ps1`, and then the `rebundle.ps1` script.
+- Requires Python 3 and Pip pre-installed. If you already have Python3 and Pip, run `Install_dependencies_for_bundling.ps1`, and then `rebundle.ps1`.
 - This will generate a `dist` folder, containing `JiggleBot-Windows.exe`.
 
 
